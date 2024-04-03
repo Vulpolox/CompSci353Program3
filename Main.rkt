@@ -44,7 +44,8 @@
 
 
 ; pre  -- takes an account number
-; post -- returns a list of all relevant transaction information associated with the account
+; post -- returns a list of all relevant transaction information associated with the account sorted by timestamp;
+;         each element of the list will be formatted as such: '(timestamp transaction-type method amount)
 (define (get-transaction-data account-number)
 
   (define (predicate lst)                      ; predicate function to help with filtering transactions
@@ -74,6 +75,90 @@
 
   (sort (loop target-entries) compare))         ; return list of relevant transaction data sorted by timestamp
 
-(get-transaction-data "982340982348")
+
+; pre  -- takes an account number
+; post -- returns the sum of all payments made by the account
+(define (get-total-payment account-number)
+  (_get-total account-number "Payment"))
+
+; pre  -- takes an account number
+; post -- returns the sum of all purchases made by the account
+(define (get-total-purchase account-number)
+  (_get-total account-number "Purchase"))
+
+; pre  -- takes an account number
+; post -- returns the ending balance of the account after all transactions
+(define (get-ending-balance account-number)
+
+  (define starting-balance-converted (_mod-string->number (get-starting-balance account-number)))
+  
+  (+ starting-balance-converted
+     (- (get-total-purchase account-number) (get-total-payment account-number))))
+
+;-- helper functions------------------------------------------------------------------
+
+; pre  -- takes an account number and a transaction type
+; post -- returns the sum of all specified transactions made by the account
+(define (_get-total account-number transaction-type)
+
+  (define (predicate lst)
+    (equal? transaction-type (second lst)))
+    
+  (define transaction-data (get-transaction-data account-number))
+  (define target-data (filter predicate transaction-data))
+  (define target-elements (_get-at-index target-data 3))
+
+  (if (empty? target-elements)
       
+      0
       
+      (let ([converted-elements (map string->number target-elements)])
+        (foldl + 0 converted-elements))))
+    
+
+; pre  -- takes a list of lists and an integer index; all sublists must have at least index+1 elements
+; post -- returns a list containing all elements of the sublists at the specified index
+(define (_get-at-index lst index [output '()])
+
+  (cond
+    
+    [(empty? lst)
+     output]
+
+    [else
+     (let ([element-to-add (list-ref (first lst) index)])
+
+       (_get-at-index (cdr lst) index (cons element-to-add output)))]))
+
+
+; pre  -- takes a string
+; post -- strips the string of all whitespace and then converts it to a number
+(define (_mod-string->number str)
+
+  (define intermediate-list (string-split str " "))
+  (string->number (first intermediate-list)))
+
+
+; -- account object------------------------------------------------------------------
+
+; pre  -- takes an account number
+; post -- creates and returns a list of account information based on account number
+;         format: '(account-number name starting-balance transaction-list total-purchase total-payment ending-balance)
+(define (create-account-object account-number)
+
+  (define name (get-name account-number))
+  (define starting-balance (get-starting-balance account-number))
+  (define transaction-list (get-transaction-data account-number))
+  (define total-purchase (get-total-purchase account-number))
+  (define total-payment (get-total-payment account-number))
+  (define ending-balance (get-ending-balance account-number))
+
+  (list account-number name starting-balance transaction-list total-purchase total-payment ending-balance))
+
+
+; pre  -- takes a list of account numbers
+; post -- returns a list of account objects
+(define (create-account-object-list account-number-list)
+  (map create-account-object account-number-list))
+
+(define account-object-list (create-account-object-list (get-account-numbers)))
