@@ -167,8 +167,6 @@
 (define (create-account-object-list account-number-list)
   (map create-account-object account-number-list))
 
-(define account-object-list (create-account-object-list (get-account-numbers)))
-
 
 ; -- file writing----------------------------------------------------------------------
 
@@ -225,6 +223,7 @@
     ))
 
 
+(define account-object-list (create-account-object-list (get-account-numbers)))
 (define file (open-output-file "STATEMENTS.txt" #:exists 'truncate))
 
 (write-to-file file account-object-list)
