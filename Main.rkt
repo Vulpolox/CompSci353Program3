@@ -139,6 +139,12 @@
   (string->number (first intermediate-list)))
 
 
+; pre  -- takes a string and an integer index
+; post -- cuts off all characters past the the integer index of the string and returns it
+(define (trim-string str limit)
+  (substring str 0 (min (string-length str) limit)))
+
+
 ; -- account object------------------------------------------------------------------
 
 ; pre  -- takes an account number
@@ -162,3 +168,65 @@
   (map create-account-object account-number-list))
 
 (define account-object-list (create-account-object-list (get-account-numbers)))
+
+
+; -- file writing----------------------------------------------------------------------
+
+; pre  -- takes an output-port and an account-object-list
+; post -- formats and outputs the data within the account-object-list to the output-port
+(define (write-to-file output-port account-object-list)
+
+  (define (write-transactions transaction-list)
+
+    (cond
+
+      [(empty? transaction-list)
+       (fprintf output-port "----")]
+
+      [else
+       (let* ([current-transaction (first transaction-list)]
+              [current-timestamp (first current-transaction)]
+              [current-transaction-type (second current-transaction)]
+              [current-method (third current-transaction)]
+              [current-amount (fourth current-transaction)])
+         (begin
+           (fprintf output-port "~a ~a ~a $~a~n"
+                    current-timestamp current-transaction-type current-method current-amount)
+           (write-transactions (cdr transaction-list))))]
+      ))
+  
+  (cond
+
+    [(empty? account-object-list)
+     "finished writing to file"]
+
+    [else
+     (let* ([current-account-object (first account-object-list)]
+            [current-account-number (first current-account-object)]
+            [current-name (second current-account-object)]
+            [current-starting-balance (third current-account-object)]
+            [current-transaction-list (fourth current-account-object)]
+            [current-total-purchase (fifth current-account-object)]
+            [current-total-payment (sixth current-account-object)]
+            [current-ending-balance (seventh current-account-object)])
+       (begin
+         (fprintf output-port "STATEMENT OF ACCOUNT~n")
+         (fprintf output-port "~a   ~a   starting balance: $~a~n" current-account-number current-name current-starting-balance)
+         (fprintf output-port "~n")
+         (write-transactions current-transaction-list)
+         (fprintf output-port "~n")
+         (fprintf output-port "Total Purchases: $~a" current-total-purchase)
+         (fprintf output-port "Total Payments:  $~a" current-total-payment)
+         (fprintf output-port "Ending Balance:  $~a" current-ending-balance)
+         (fprintf output-port "~n")
+         (fprintf output-port "-=====================================-~n")
+
+         (write-to-file output-port (cdr account-object-list))))]
+    ))
+
+
+(define file (open-output-file "STATEMENTS.txt" #:exists 'truncate))
+
+(write-to-file file account-object-list)
+
+(close-output-port file)
