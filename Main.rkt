@@ -189,7 +189,7 @@
               [current-amount (fourth current-transaction)])
          (begin
            (fprintf output-port "~a ~a ~a $~a~n"
-                    current-timestamp current-transaction-type current-method current-amount)
+                    current-timestamp current-transaction-type (trim-string current-method 40) current-amount)
            (write-transactions (cdr transaction-list))))]
       ))
   
