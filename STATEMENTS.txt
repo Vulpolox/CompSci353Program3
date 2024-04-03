@@ -4,14 +4,20 @@ STATEMENT OF ACCOUNT
 23460 Purchase "Sid's Lids" $132.75
 23482 Payment Cash $105.00
 ----
-Total Purchases: $132.75Total Payments:  $105.0Ending Balance:  $27.75
+Total Purchases: $132.75
+Total Payments:  $105.00
+Ending Balance:  $27.75
+
 -=====================================-
 STATEMENT OF ACCOUNT
 234987234981   "J. T. Kirk & Co."   starting balance: $298.18
 
 23456 Purchase "Culvers" $14.72
 ----
-Total Purchases: $14.72Total Payments:  $0Ending Balance:  $312.90000000000003
+Total Purchases: $14.72
+Total Payments:  $0.00
+Ending Balance:  $312.90
+
 -=====================================-
 STATEMENT OF ACCOUNT
 982340982348   "Spacely Sprockets"   starting balance: $29109.14
@@ -21,5 +27,8 @@ STATEMENT OF ACCOUNT
 23472 Purchase "Mort's Metals" $17293.14
 23670 Payment Check $20000.00
 ----
-Total Purchases: $17710.059999999998Total Payments:  $30000.0Ending Balance:  $16819.199999999997
+Total Purchases: $17710.06
+Total Payments:  $30000.00
+Ending Balance:  $16819.20
+
 -=====================================-

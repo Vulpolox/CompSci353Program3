@@ -213,9 +213,9 @@
          (fprintf output-port "~n")
          (write-transactions current-transaction-list)
          (fprintf output-port "~n")
-         (fprintf output-port "Total Purchases: $~a~n" current-total-purchase)
-         (fprintf output-port "Total Payments:  $~a~n" current-total-payment)
-         (fprintf output-port "Ending Balance:  $~a~n" current-ending-balance)
+         (fprintf output-port "Total Purchases: $~a~n" (~r #:precision '(= 2) current-total-purchase))
+         (fprintf output-port "Total Payments:  $~a~n" (~r #:precision '(= 2) current-total-payment))
+         (fprintf output-port "Ending Balance:  $~a~n" (~r #:precision '(= 2) current-ending-balance))
          (fprintf output-port "~n")
          (fprintf output-port "-=====================================-~n")
 
