@@ -1,6 +1,7 @@
 #lang racket
 
 (provide pad-string)
+(provide round-to-2)
 
 ; pre  -- takes a string "s," a character "c," an integer "t," and a string "a"
 ; post -- returns a padded string composed of the orignal string "s"
@@ -18,7 +19,7 @@
 
   (cond
     
-    [(<= str-length target-length) (_trim-string str target-length)] ; if target-length is less than str-length, trim str to target-length and return that
+    [(<= target-length str-length) (_trim-string str target-length)] ; if target-length is less than str-length, trim str to target-length and return that
 
     [else                                                            ; if target-length is greater than str-length
      (let* ([padding (make-string pad-amount char)]                  ; create the padding
@@ -37,7 +38,7 @@
          ))]
     ))
 
-
-
-
-(pad-string "hello" #\* 7 "right")
+; pre  -- takes a number
+; post -- returns the number rounded to two decimal places as a string
+(define (round-to-2 num)
+  (~r #:precision '(= 2) num))

@@ -1,7 +1,7 @@
 #lang racket
 
 (require "FileReader.rkt") ; provides formatted data in "refined-account-lines" and "refined-transaction-lines"
-(require "Format.rkt")     ; provides the "pad-string" function
+(require "Format.rkt")     ; provides the "pad-string" function and the "round-to-2" function
 
 
 ; pre  -- takes no arguments on initial call; takes updated account data and an output on subsequent recursive calls
@@ -10,12 +10,12 @@
 
   (cond
 
-    [(empty? data)
+    [(empty? data)                                                  ; if there are no more unprocessed lines from ACCOUNTS.txt, return output
      output]
 
     [else
-     (let* ([number-to-add (first (first data))]
-            [updated-output (append output (list number-to-add))])
+     (let* ([number-to-add (first (first data))]                    ; the account number to add to output
+            [updated-output (append output (list number-to-add))])  ; updated output with number-to-add
        
        (get-account-numbers (cdr data) updated-output))]))
 
@@ -187,10 +187,15 @@
               [current-timestamp (first current-transaction)]
               [current-transaction-type (second current-transaction)]
               [current-method (third current-transaction)]
-              [current-amount (fourth current-transaction)])
+              [current-amount (fourth current-transaction)]
+
+              [formatted-timestamp (pad-string current-timestamp #\space 15 "right")]
+              [formatted-transaction-type (pad-string current-transaction-type #\space 15 "right")]
+              [formatted-method (pad-string current-method #\space 25 "right")]
+              [formatted-amount (pad-string current-amount #\space 10 "left")])
          (begin
            (fprintf output-port "~a ~a ~a $~a~n"
-                    current-timestamp current-transaction-type (trim-string current-method 40) current-amount)
+                    formatted-timestamp formatted-transaction-type (trim-string formatted-method 40) formatted-amount)
            (write-transactions (cdr transaction-list))))]
       ))
   
@@ -205,18 +210,24 @@
             [current-name (second current-account-object)]
             [current-starting-balance (third current-account-object)]
             [current-transaction-list (fourth current-account-object)]
-            [current-total-purchase (fifth current-account-object)]
-            [current-total-payment (sixth current-account-object)]
-            [current-ending-balance (seventh current-account-object)])
+            [current-total-purchase (round-to-2 (fifth current-account-object))]
+            [current-total-payment (round-to-2 (sixth current-account-object))]
+            [current-ending-balance (round-to-2 (seventh current-account-object))]
+
+            [formatted-account-number (pad-string current-account-number #\space 15 "right")]
+            [formatted-name (pad-string current-name #\space 25 "right")]
+            [formatted-total-purchase (pad-string current-total-purchase #\space 10 "left")]
+            [formatted-total-payment (pad-string current-total-payment #\space 10 "left")]
+            [formatted-ending-balance (pad-string current-ending-balance #\space 10 "left")])
        (begin
          (fprintf output-port "STATEMENT OF ACCOUNT~n")
-         (fprintf output-port "~a   ~a   starting balance: $~a~n" current-account-number current-name current-starting-balance)
+         (fprintf output-port "~a   ~a   starting balance: $~a~n" formatted-account-number formatted-name current-starting-balance)
          (fprintf output-port "~n")
          (write-transactions current-transaction-list)
          (fprintf output-port "~n")
-         (fprintf output-port "Total Purchases: $~a~n" (~r #:precision '(= 2) current-total-purchase))
-         (fprintf output-port "Total Payments:  $~a~n" (~r #:precision '(= 2) current-total-payment))
-         (fprintf output-port "Ending Balance:  $~a~n" (~r #:precision '(= 2) current-ending-balance))
+         (fprintf output-port "Total Purchases: $~a~n" formatted-total-purchase)
+         (fprintf output-port "Total Payments:  $~a~n" formatted-total-payment)
+         (fprintf output-port "Ending Balance:  $~a~n" formatted-ending-balance)
          (fprintf output-port "~n")
          (fprintf output-port "-=====================================-~n")
 
