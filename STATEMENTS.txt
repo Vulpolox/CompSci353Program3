@@ -1,5 +1,5 @@
 STATEMENT OF ACCOUNT
-456109801804      "J. L. Picard"              starting balance: $ 0.0 
+456109801804      "J. L. Picard"              Starting Balance: $ 0.0 
 
 23460           Purchase        "Sid's Lids"              $    132.75
 23482           Payment         Cash                      $    105.00
@@ -10,7 +10,7 @@ Ending Balance:  $     27.75
 
 -=====================================-
 STATEMENT OF ACCOUNT
-234987234981      "J. T. Kirk & Co."          starting balance: $298.18
+234987234981      "J. T. Kirk & Co."          Starting Balance: $298.18
 
 23456           Purchase        "Culvers"                 $     14.72
 ----
@@ -20,7 +20,7 @@ Ending Balance:  $    312.90
 
 -=====================================-
 STATEMENT OF ACCOUNT
-982340982348      "Spacely Sprockets"         starting balance: $29109.14
+982340982348      "Spacely Sprockets"         Starting Balance: $29109.14
 
 23458           Purchase        "Peter's Plastics"        $    416.92
 23460           Payment         Credit                    $  10000.00
