@@ -225,7 +225,7 @@
             [formatted-ending-balance (pad-string current-ending-balance #\space 10 "left")])
        (begin
          (fprintf output-port "STATEMENT OF ACCOUNT~n")
-         (fprintf output-port "~a   ~a   starting balance: $~a~n" formatted-account-number formatted-name current-starting-balance)
+         (fprintf output-port "~a   ~a   Starting Balance: $~a~n" formatted-account-number formatted-name current-starting-balance)
          (fprintf output-port "~n")
          (write-transactions current-transaction-list)
          (fprintf output-port "~n")
