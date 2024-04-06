@@ -1,0 +1,8 @@
+#lang racket
+
+(provide pad-string)
+
+(define (pad-string str char amount)
+
+  (define str-length (length str))
+  

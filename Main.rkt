@@ -1,6 +1,7 @@
 #lang racket
 
 (require "FileReader.rkt") ; provides formatted data in "refined-account-lines" and "refined-transaction-lines"
+(require "Format.rkt")     ; provides the "pad-string" function
 
 
 ; pre  -- takes no arguments on initial call; takes updated account data and an output on subsequent recursive calls
