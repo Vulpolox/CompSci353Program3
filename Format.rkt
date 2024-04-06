@@ -5,12 +5,12 @@
 
 ; pre  -- takes a string "s," a character "c," an integer "t," and a string "a"
 ; post -- returns a padded string composed of the orignal string "s"
-;         with a number of "c" added to the left or right specified by "a" in order
+;         with a number of "c" added to the left or right (specified by "a") in order
 ;         for the resulting combined string's length to be "t" characters long;
 ;         possible values for "a" are "left" and "right"
 (define (pad-string str char target-length align)
 
-  ; helper function that limits the size of a string and returns it
+                                                   ; helper function that limits the size of a string and returns it
   (define (_trim-string str limit)
     (substring str 0 (min (string-length str) limit)))
   

@@ -1,6 +1,10 @@
 #lang racket
 
 (require "FileReader.rkt") ; provides formatted data in "refined-account-lines" and "refined-transaction-lines"
+
+; each element of refined-account-lines is formatted as:     '(account-number account-name starting-balance)
+; each element of refined-transaction-lines is formatted as: '(transaction-type account-number timestamp method amount)
+
 (require "Format.rkt")     ; provides the "pad-string" function and the "round-to-2" function
 
 
@@ -17,31 +21,31 @@
      (let* ([number-to-add (first (first data))]                    ; the account number to add to output
             [updated-output (append output (list number-to-add))])  ; updated output with number-to-add
        
-       (get-account-numbers (cdr data) updated-output))]))
+       (get-account-numbers (cdr data) updated-output))]))          ; recursive call
 
 
 ; pre  -- takes an account number
 ; post -- returns the name associated with the account number
 (define (get-name account-number)
 
-  (define (predicate lst)
+  (define (predicate lst)                                           ; predicate function to help with filter
     (equal? account-number (list-ref lst 0)))
 
-  (define target-entry (filter predicate refined-account-lines))
+  (define target-entry (filter predicate refined-account-lines))    ; the element from refined-account-lines with the specified account number 
 
-  (second (first target-entry)))
+  (second (first target-entry)))                                    ; return the name associated with the account
 
 
 ; pre  -- takes an account number
 ; post -- returns the initial balance associated with the account number
 (define (get-starting-balance account-number)
 
-  (define (predicate lst)
+  (define (predicate lst)                                           ; preciate function to help with filter
     (equal? account-number (list-ref lst 0)))
 
-  (define target-entry (filter predicate refined-account-lines))
+  (define target-entry (filter predicate refined-account-lines))    ; the element from refined-account-lines with the specified account number
 
-  (third (first target-entry)))
+  (third (first target-entry)))                                     ; return the starting balance associated with the account
 
 
 ; pre  -- takes an account number
@@ -102,18 +106,18 @@
 ; post -- returns the sum of all specified transactions made by the account
 (define (_get-total account-number transaction-type)
 
-  (define (predicate lst)
+  (define (predicate lst)                                           ; predicate function to help with filter
     (equal? transaction-type (second lst)))
     
-  (define transaction-data (get-transaction-data account-number))
-  (define target-data (filter predicate transaction-data))
-  (define target-elements (_get-at-index target-data 3))
+  (define transaction-data (get-transaction-data account-number))   ; a list of transaction information where each element is formatted as '(timestamp transaction-type method amount))
+  (define target-data (filter predicate transaction-data))          ; a list of the elements of transaction-data whose transaction-type matches with the parameter
+  (define target-elements (_get-at-index target-data 3))            ; a list of string representations of the amounts of the transactions
 
-  (if (empty? target-elements)
+  (if (empty? target-elements)                                         ; if target-elements is empty (i.e. the account holder made no transactions of type transaction-type) return 0
       
       0
       
-      (let ([converted-elements (map string->number target-elements)])
+      (let ([converted-elements (map string->number target-elements)]) ; otherwise, typecast all elements in target-elements to numbers and return their sum
         (foldl + 0 converted-elements))))
     
 
@@ -175,7 +179,7 @@
 ; post -- formats and outputs the data within the account-object-list to the output-port
 (define (write-to-file output-port account-object-list)
 
-  (define (write-transactions transaction-list)
+  (define (write-transactions transaction-list)   ; sub-function for writing each account's transaction information
 
     (cond
 

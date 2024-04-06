@@ -1,8 +1,8 @@
 #lang racket
 
 ; provide the formatted data for use in other .rkt files
-(provide refined-account-lines)
-(provide refined-transaction-lines)
+(provide refined-account-lines)     ; each element of refined-account-lines is formatted as:     '(account-number account-name starting-balance)
+(provide refined-transaction-lines) ; each element of refined-transaction-lines is formatted as: '(transaction-type account-number timestamp method amount)
 
 ; pre  -- takes a list of strings and a delimiter
 ; post -- splits each of the strings in the list into sublists of strings separated by specified delimiter
